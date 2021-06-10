@@ -1,24 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
+import { Input } from "./Input";
+import { Todo } from "./List";
 
-//include images into your bundle
-import rigoImage from "../../img/rigo-baby.jpg";
-
-//create your first component
 export function Home() {
+	const [todos, setTodos] = useState([]);
+
+	const addTodo = todo => {
+		setTodos([...todos, todo]);
+	};
+
+	const deleteTodo = id => {
+		const listFiltered = todos.filter(item => item.id !== id);
+		setTodos([...listFiltered]);
+	};
+
 	return (
-		<div className="text-center mt-5">
-			<h1>Hello Rigo!</h1>
-			<p>
-				<img src={rigoImage} />
-			</p>
-			<a href="#" className="btn btn-success">
-				If you see this green button... bootstrap is working
-			</a>
-			<p>
-				Made by{" "}
-				<a href="http://www.4geeksacademy.com">4Geeks Academy</a>, with
-				love!
-			</p>
+		<div className="container">
+			<div className="appTitle">
+				<p>todos</p>
+			</div>
+			<div className="todoListBody">
+				<Input addTodo={addTodo} />
+				{todos.length === 0 ? <p>No tasks, add a task</p> : null}
+				{todos.map(todo => (
+					<Todo key={todo.id} todo={todo} deleteTodo={deleteTodo} />
+				))}
+				<div className="todosLength">
+					<p>{`${todos.length} items left`}</p>
+				</div>
+			</div>
 		</div>
 	);
 }
